@@ -14,7 +14,7 @@ Practice_Lab/
 
 Declare variables in both root and module if you want to pass them through.
 
-** How It Works**
+**How It Works:**
 
 - ```Root variables.tf``` declares variables for the root module.
 - ```terraform.tfvars``` (or CLI input) provides values for those variables.
@@ -29,8 +29,8 @@ The ```terraform.tfvars``` file provides values for variables, but you must stil
 
 terraform.tfvars only supplies values; it does not declare variables.
 
-- **variables.tf declares variables.**
-- **terraform.tfvars provides values for those variables**.
+- **``variables.tf`` declares variables.**
+- **``terraform.tfvars`` provides values for those variables**.
 
 
 **```variables.tf``` was already declared in ```modules/ec2/``` right ? Why again need to define ```variables.tf``` in Root folder ?**
@@ -47,7 +47,7 @@ The ```root module (main.tf)``` needs its own variable declarations to use ```va
 - **If you want to use variables (like ami_value = var.ami_value), then you must declare them in AV-D3/variables.tf.**
 
 
-When to Use ```variables.tf``` in** Root **
+When to Use ```variables.tf``` in **Root**
 If you want to make your configuration flexible and reusable, you can declare variables in ```AV-D3/variables.tf``` and reference them in your ```main.tf```:
 
 
@@ -60,3 +60,24 @@ module "ec2" {
 ```
 
 And then declare those variables in ```AV-D3/variables.tf```
+
+
+
+You should always place the terraform ```{ required_providers { ... } }``` block in your **root module** (main.tf), not inside your module (**modules/ec2**)
+
+**Reason:**
+
+- The root module manages provider installation and versioning.
+- Modules should not declare required_providers—they inherit providers from the root.
+- Modules (like modules/ec2) should not have their own terraform ```{ required_providers { ... } }``` block.
+
+
+If you do not include the terraform ```{ required_providers { ... } }``` block, Terraform will:
+
+- Still work in most cases, because it can** automatically download the latest version of the provider when you run terraform init**.
+- Default to the latest provider version (which may change over time and **could introduce breaking changes**).
+- Not enforce a specific provider version, so your **code might break in the future** if a new provider version is released with incompatible changes.
+
+**Best practice:**
+- **Always specify the required provider and version in your root module to ensure consistent, repeatable deployments and avoid unexpected issues.**
+
