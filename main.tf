@@ -36,3 +36,21 @@ resource "aws_vpc_security_group_egress_rule" "Allow-All-outbound" {
   cidr_ipv4         = var.Allow_All
   ip_protocol       = var.All_Outbound_Ports
 }
+
+resource "aws_instance" "test-vm-01" {
+  ami           = var.ami
+  instance_type = var.instance_type
+  tags          = merge(var.tags, {
+    Name = "Test-VM-01"
+  })
+  
+}
+
+
+resource "aws_eip" "lb" {
+  instance = aws_instance.test-vm-01.id
+  domain   = "vpc"
+  tags = {
+    Name = "Test-Public-IP"
+  }
+}
