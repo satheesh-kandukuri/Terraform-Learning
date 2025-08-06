@@ -136,3 +136,5 @@ ex: Restrict to allowed instance types:
 condition     = contains(["t2.micro", "t3.small"], var.instance_type)
 error_message = "Only t2.micro and t3.small are allowed."
 ```
+<img width="1042" height="412" alt="image" src="https://github.com/user-attachments/assets/dc9f5971-4248-48fb-87d3-0bac4f5e49e5" />
+
