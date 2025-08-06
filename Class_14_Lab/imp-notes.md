@@ -22,7 +22,7 @@ and using them as names will cause syntax errors or unexpected behavior:
 
 Here’s a categorized list of Terraform internal keywords and built-in constructs:
 
-🟩 **Top-Level Blocks (Keywords)**
+### 🟩 **Top-Level Blocks (Keywords)**
 Most of Terraform's features are implemented as top-level blocks including:
 
 - resource - Defines infrastructure resources (compute instances, networks, etc.)
@@ -35,7 +35,7 @@ Most of Terraform's features are implemented as top-level blocks including:
 - terraform - Contains Terraform settings and requirements
 
 
-🟦 **Resource Meta-Arguments (Special inside resource blocks)**
+### 🟦 **Resource Meta-Arguments (Special inside resource blocks)**
 These are internal keywords that configure the behavior of resources:
 
 - count - Creates multiple instances of a resource
@@ -58,7 +58,7 @@ HCL Language Constructs
 - true / false - Boolean literals
 
 
-🟨 **Built-in Functions (Internal function names)**
+### 🟨 **Built-in Functions (Internal function names)**
 Terraform includes many built-in functions (don’t use these as variable names):
 
 - length()
@@ -75,3 +75,64 @@ Terraform includes many built-in functions (don’t use these as variable names)
 - regex()
 - flatten()
 - zipmap()
+
+
+Terraform defined the following arguments to be used inside the ```variable``` block:
+
+- type
+- default
+- description
+- validation
+- sensitive
+- nullable
+
+
+The validation block in Terraform is very important because it helps enforce input correctness and safety before Terraform applies any changes to your infrastructure.
+
+### ✅ What is the validation block?
+The ```validation``` block is used inside a ```variable``` block to define custom rules for acceptable input values. If the condition fails, Terraform throws an error early, preventing misconfiguration.
+
+### 🎯 Why is it important?
+- Catches User Input Errors Early
+Prevents invalid values (e.g., an empty AMI ID, an incorrect region name, or an invalid CIDR block) from reaching the Terraform plan or apply stage.
+
+- Avoids Infrastructure Misconfiguration
+Example: Ensuring an EC2 instance is only deployed in allowed regions or with allowed instance types.
+
+- Improves User Experience / Guides users
+Gives clear, custom error messages so the user knows exactly what went wrong and how to fix it.
+
+- Improves Security / Encourages standards
+Prevents unsafe values (e.g., public CIDRs, default passwords, or unrestricted ports) from being used accidentally.
+
+### ❗ Important Notes:
+- validation only works on input variables (not locals, resources, etc.).
+- Must return a boolean expression (true or false).
+- You can use any Terraform expression functions (length(), substr(), contains(), etc.).
+
+### ✅ Best Practices:
+- Use ```validation``` to **catch errors early**.
+- Always write **clear, helpful** ```error_messages```.
+- Keep conditions **simple and readable**.
+
+  
+the validation block inside a variable is used to **enforce custom rules on the input value**. 
+The core part of this block is the ```condition```
+
+### 🔍 What is condition?
+- It's a Terraform expression that must evaluate to either ```true``` or ```false```.
+- If it returns ```true```, input is accepted.
+- If it returns ```false```, Terraform throws an error with the given ```error_message```.
+
+
+🧠 You Can Use:
+- Logical operators: ```==```, ```!=```, ```>```, ```<```, ```&&```, ```||```
+- Terraform functions: ```length()```, ```contains()```, ```substr()```, ```regex()```, ```can()```, etc.
+- Variables: referenced as ```var.variable_name```
+
+
+ex: Restrict to allowed instance types:
+```hcl
+condition     = contains(["t2.micro", "t3.small"], var.instance_type)
+error_message = "Only t2.micro and t3.small are allowed."
+```
