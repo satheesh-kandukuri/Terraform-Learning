@@ -1,3 +1,5 @@
+**```https://wahlnetwork.com/2020/04/29/terraform-plans-modules-and-remote-state/```**
+
 <img width="997" height="330" alt="image" src="https://github.com/user-attachments/assets/cfd8c81d-9cfc-4e4c-9c14-25f90e49a4c0" />
 
 The ```scripts``` are simple human-readable text files that describe the desired deployment architecture. 
@@ -21,4 +23,6 @@ At this point, **Terraform will run the API commands against the target environm
 If this succeeds, then Terraform stores the final metadata in the ```state file```. 
 Thus we then have a digital representation of the deployment.
 
-```https://wahlnetwork.com/2020/04/29/terraform-plans-modules-and-remote-state/```
+
+
+<img width="1778" height="910" alt="image" src="https://github.com/user-attachments/assets/48f87b3b-797e-4e17-bc7c-e5a9ca122bdf" />
