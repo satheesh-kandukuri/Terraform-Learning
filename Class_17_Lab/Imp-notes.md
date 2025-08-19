@@ -84,3 +84,55 @@ variable "iam_users" {
 
 
 ### Conditional statements in Terraform
+
+#### ternary operator
+The ```ternary operator``` in Terraform, also known as a conditional expression, provides a way to select one of two values based on a boolean condition.
+The syntax looks like this:
+```hcl
+condition ? true_value : false_value
+
+```
+- ```condition```:
+This is a boolean expression that evaluates to either ```true``` or ```false```. It can involve comparisons (e.g., ==, !=, <, >), logical operators (e.g., &&, ||), or functions that return a boolean.
+- ```true_value```:
+This is the value that will be returned if the condition evaluates to true. 
+- ```false_value```:
+This is the value that will be returned if the condition evaluates to false
+
+Example:
+
+```hcl
+resource "aws_instance" "dbaas" {
+  ami           = var.input == "Prod" ? var.ami[0] : var.input == "Test" ? var.ami[1] : var.ami[2]
+  instance_type = var.instance_type[var.input]
+  tags = {
+    Name        = "DBaaS-${var.input}"
+    Environment = var.input
+  }
+}
+
+variable "ami" {
+  description = "AMI ID for the AWS instance"
+  type        = list(string)
+  default     = ["ami-0ec18f6103c5e0491", "ami-020cba7c55df1f615", "ami-00ca32bbc84273381"]
+}
+
+variable "instance_type" {
+  description = "Instance type for the AWS instance"
+  type        = map(string)
+  default = {
+    "Prod" = "t3.medium"
+    "Test" = "t3.small"
+    "Dev"  = "t3.nano"
+  }
+}
+
+variable "input" {
+  description = "Select the environment to deploy"
+  type        = string
+}
+```
+
+<img width="400" height="100" alt="image" src="https://github.com/user-attachments/assets/49a79cf9-aa7f-4998-b00a-2225a6e3fe63" />
+
+<img width="700" height="450" alt="image" src="https://github.com/user-attachments/assets/3623c8b6-0c5b-406a-a1c4-2241c00080da" />
