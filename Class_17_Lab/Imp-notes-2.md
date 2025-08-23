@@ -34,6 +34,8 @@ resource "aws_instance" "test-01" {
 
 
 resource "aws_s3_bucket" "tst-bkt-01" {
-  bucket = "test-bucket-007"
+  bucket = "prctse-bkt-tf-007"
 }
 ```
+<img width="644" height="129" alt="image" src="https://github.com/user-attachments/assets/e0322d48-d55f-40f1-bf6c-5221d7b67938" />
+
