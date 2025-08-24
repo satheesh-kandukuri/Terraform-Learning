@@ -121,3 +121,33 @@ Why Use ```~>```?
 <img width="385" height="608" alt="image" src="https://github.com/user-attachments/assets/ba9a001a-6d75-4e27-9ead-39e1a1fb646e" />
 <img width="432" height="272" alt="image" src="https://github.com/user-attachments/assets/0beba833-a114-4df1-a119-edb3f9d86ea7" />
 
+
+
+### Multiple providers in terraform
+
+If we want to create resources at a time in multiple regions then we can use multiple providers like below.
+```hcl
+resource "aws_instance" "us-e1-ec2" {
+  ami = "ami-00ca32bbc84273381"
+  instance_type = "t2.micro"
+  provider = aws.N.Virginia  # Provider - 01
+}
+
+resource "aws_instance" "us-e1-ec2" {
+  ami = "ami-01102c5e8ab69fb75"
+  instance_type = "t2.micro"
+  provider = aws.Oregon  # Provider - 02
+}
+
+provider "aws" {      ## Provider - 01
+    region = "us-east-1"
+    alias = "N.Virginia"
+  
+}
+
+provider "aws" {      ## Provider - 02
+    region = "us-west-2"
+    alias = "Oregon"
+}
+```
+
